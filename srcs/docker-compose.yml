@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    networks:
+      - inception
+    build:
+      context: requirements/mariadb # ou se trouve le Dockerfile
+      dockerfile: Dockerfile
+    env_file: .env
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: unless-stopped # redemarre tant qu'il n'est pas stoppe
+    expose:
+      - "3306"
+
+  nginx:
+    container_name: nginx
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - inception
+    depends_on: # indique a nginx de ne pas demarrer tant que wordpress n'est pas demarre
+      - wordpress
+    build:
+      context: requirements/nginx # ou se trouve le Dockerfile
+      dockerfile: Dockerfile
+    env_file: .env
+    ports: # le port est expose a la machine locale
+      - "443:443"
+    restart: on-failure # redemarre uniquement en cas de crash
+
+  wordpress:
+    container_name: wordpress
+    env_file: .env
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - inception
+    build:
+      context: requirements/wordpress # ou se trouve le Dockerfile
+      dockerfile: Dockerfile
+    depends_on: # indique a wordpress de ne pas demarrer tant que mariadb n'est pas demarre
+      - mariadb
+    restart: on-failure # redemarre uniquement en cas de crash
+    expose:
+      - "9000"
+
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/saguesse/data/wordpress'
+  mariadb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/saguesse/data/mariadb'
+
+
+networks:
+  inception:
+    driver: bridge
