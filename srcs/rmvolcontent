@@ -1,3 +1,0 @@
-sudo rm -rvf $HOME/data/mariadb/*
-sudo rm -rvf $HOME/data/wordpress/*
-

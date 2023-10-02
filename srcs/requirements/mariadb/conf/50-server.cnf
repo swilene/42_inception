@@ -1,6 +1,5 @@
 [mysqld] # categorie de la configuration
 datadir = /var/lib/mysql # dossier qui sotckera notre base de donnees
-#socket = /run/mysqld/mysqld.sock # dossier ou se trouve la socket
 bind_address = 0.0.0.0 # toutes les adresses IP du reseau peuvent se connecter
 port = 3306 # port precise par le sujet
 user = mysql

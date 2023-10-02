@@ -1,5 +1,7 @@
 #!/bin/bash
+
 sleep 15
+
 if [ ! -f "/var/www/html/wp-config.php" ]
 then
 	wp core download --path=/var/www/html --allow-root
@@ -25,7 +27,5 @@ if [ ! -d "/run/php" ]
 then
 	mkdir /run/php
 fi
-
-#tail -f
 
 exec /usr/sbin/php-fpm7.4 -F
