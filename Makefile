@@ -1,6 +1,7 @@
 FILE = srcs/docker-compose.yml
 
 build:
+	mkdir -p data
 	mkdir -p data/mariadb
 	mkdir -p data/wordpress
 	docker compose -f $(FILE) up --build -d
